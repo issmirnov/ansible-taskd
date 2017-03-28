@@ -1,14 +1,11 @@
 ---
+- name: check if certs need to be generated
+  shell: "stat {{taskd_certs_path}}/*.pem"
+  register: certs_state
+  ignore_errors: yes
+  changed_when: false
+
 - block:
-  - name: check if certs need to be generated
-    shell: "stat {{taskd_certs_path}}/*.pem"
-    register: certs_state
-    ignore_errors: yes
-
-  - fail:
-      msg: "certificates exist already"
-    when: certs_state.rc == 0
-
   - name: create certs directory
     file:
       path: "{{taskd_certs_path}}"
@@ -34,7 +31,4 @@
     notify:
     - restart taskd
 
-  rescue:
-
-  - debug:
-      msg: "proceed"
+  when: certs_state.rc != 0

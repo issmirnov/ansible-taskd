@@ -1,0 +1,13 @@
+# This is a stub playbook, hardcoded in vagrant.
+# You can add in includes for whatever role you are currently testing.
+
+- name: install ansible deps on bare server
+  remote_user: root
+  hosts: all
+  gather_facts: no
+  pre_tasks:
+    - name: 'install python2 and json support'
+      raw: sudo apt-get -y install python-simplejson
+
+- include: main.yml
+- include: add_user.yml

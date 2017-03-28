@@ -53,6 +53,8 @@
     chdir: "{{taskd_source_dir}}"
   become: true
   become_user: "{{taskd_user}}"
+  register: compiled
+  changed_when: "'Installing' in compiled.stdout"
 
 - name: switch symlink
   file:
@@ -84,4 +86,3 @@
     enabled: yes
   notify:
   - restart taskd
-

@@ -1,7 +1,7 @@
 BITS=4096
-EXPIRATION_DAYS=365
-ORGANIZATION="Göteborg Bit Factory"
-CN={{taskd_fqdn}}
-COUNTRY=SE
-STATE="Västra Götaland"
-LOCALITY="Göteborg"
+EXPIRATION_DAYS={{ taskd_expiration_days }}
+ORGANIZATION={{ taskd_organization }}
+CN={{ taskd_fqdn }}
+COUNTRY={{ taskd_country }}
+STATE={{ taskd_state }}
+LOCALITY={{ taskd_locality }}

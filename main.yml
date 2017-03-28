@@ -1,8 +1,11 @@
 ---
 - hosts: all
   gather_facts: yes
+  vars:
+    taskd_organization: SmirnovLabs
+    taskd_fqdn: task.smirnov.work
   vars_files:
-    - 'vars/main.yml'
+    - 'defaults/main.yml'
 
   handlers:
   - name: restart taskd
@@ -15,4 +18,3 @@
     - base
     - certs
     - config
-#    - init

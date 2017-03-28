@@ -1,9 +1,9 @@
 ---
-- name: variable taskd_org
+- name: ensure taskd_org variable is present
   debug:
     msg: "{{ taskd_org  | mandatory }}"
 
-- name: variable taskd_client
+- name: ensure taskd_client variable is present
   debug:
     msg: "{{ taskd_client  | mandatory }}"
 
@@ -12,28 +12,34 @@
     stat:
       path: "{{taskd_data_path}}/orgs/{{taskd_org}}"
     register: org
-  
+
   - name: create Org {{taskd_org}}
     shell: "{{taskd_install_dir}}/bin/taskd add org {{taskd_org}} --data {{taskd_data_path}}"
     when: org.stat.exists == false
     become: true
     become_user: "{{taskd_user}}"
 
+
+- name: create file friendly name from taskd_client
+  set_fact:
+    taskd_client_cert_name: "{{ taskd_client | regex_replace('\\s', '_') | lower }}"
+
+- name: check if client {{taskd_client}} exists
+  find:
+    paths: "{{taskd_data_path}}/orgs/{{taskd_org}}/users"
+    contains: "user={{taskd_client}}"
+    recurse: yes
+  register: user
+
 - block:
-  - name: check if client {{taskd_client}} exists
-    find:
-      paths: "{{taskd_data_path}}/orgs/{{taskd_org}}/users"
-      contains: "user={{taskd_client}}"
-      recurse: yes
-    register: user
+  - name: set user key from folder path
+    set_fact:
+      taskd_user_key: "{{user.files[0].path | dirname | basename }}"
+  when: user.matched != 0
 
-  - fail:
-      msg: "client {{taskd_client}} already exist"
-    when: user.matched != 0
-
+- block:
   - name: create user {{taskd_client}}
-    shell: "{{taskd_install_dir}}/bin/taskd add user {{taskd_org}} {{taskd_client}} --data {{taskd_data_path}}"
-    when: user.matched == 0
+    shell: "{{taskd_install_dir}}/bin/taskd add user {{taskd_org}} '{{taskd_client}}' --data {{taskd_data_path}}"
     become: true
     become_user: "{{taskd_user}}"
     register: created_user
@@ -43,18 +49,27 @@
   - debug:
       msg: "{{created_user.stdout_lines[0]}}"
 
-  - name: generate certificate for {{taskd_client}}
-    shell: "{{taskd_source_dir}}/pki/generate.client {{taskd_client}}"
+  - name: generate user key
+    shell: "echo {{created_user.stdout_lines[0]}} | cut -d' ' -f 4"
+    register: user_key_cmd
+
+  - name: set user key
+    set_fact:
+      taskd_user_key: "{{user_key_cmd.stdout_lines[0]}}"
+
+  - name: "generate certificate for {{taskd_client}}"
+    shell: "{{taskd_source_dir}}/pki/generate.client {{ taskd_client_cert_name }}"
     args:
       chdir: "{{taskd_certs_path}}"
-    when: user.matched == 0
+      creates: "{{ taskd_certs_path }}/{{ taskd_client_cert_name }}.cert.pem"
     become: true
     become_user: "{{taskd_user}}"
     notify:
     - restart taskd
 
-  rescue:
+  when: user.matched == 0
 
-  - debug:
-      msg: "proceed"
-
+- block:
+  - fail:
+      msg: "Multiple user matches, aborting!"
+  when: user.matched != 0 and user.matched != 1

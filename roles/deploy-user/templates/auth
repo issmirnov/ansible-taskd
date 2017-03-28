@@ -1,0 +1,5 @@
+taskd.certificate   = ~/.task/{{ taskd_client_cert_name }}.cert.pem
+taskd.key           = ~/.task/{{ taskd_client_cert_name }}.key.pem
+taskd.ca            = ~/.task/ca.cert.pem
+taskd.server        = {{ taskd_fqdn }}:53589
+taskd.credentials   = {{ taskd_org }}/{{ taskd_client }}/{{taskd_user_key}}

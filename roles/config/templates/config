@@ -6,7 +6,7 @@ pid.file={{taskd_data_path}}/taskd.pid
 queue.size=10
 request.limit=1048576
 root={{taskd_data_path}}
-server={{ansible_hostname}}:53589
+server={{taskd_fqdn}}:53589
 trust=strict
 verbose=1
 #debug.tls=200
@@ -18,5 +18,3 @@ server.cert={{taskd_certs_path}}/server.cert.pem
 server.key={{taskd_certs_path}}/server.key.pem
 server.crl={{taskd_certs_path}}/server.crl.pem
 ca.cert={{taskd_certs_path}}/ca.cert.pem
-
-

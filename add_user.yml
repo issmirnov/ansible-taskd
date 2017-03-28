@@ -1,8 +1,11 @@
 ---
 - hosts: all
   gather_facts: no
+  vars:
+    taskd_org: SmirnovLabs
+    taskd_client: Test User3
   vars_files:
-    - 'vars/main.yml'
+    - 'defaults/main.yml'
 
   handlers:
   - name: restart taskd
@@ -13,3 +16,4 @@
 
   roles:
     - add-user
+    - deploy-user

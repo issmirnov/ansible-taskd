@@ -1,1 +1,13 @@
-/*.retry
+# OS fluff
+*._
+*~
+
+# ansible
+*.retry
+
+# vagrant
+.vagrant
+*console.log
+
+# Client specific data 
+fetch/
