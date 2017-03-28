@@ -1,0 +1,14 @@
+---
+- hosts: server
+  gather_facts: yes
+  vars_files:
+    - 'defaults/main.yml'
+    - 'vars/main.yml'
+
+  handlers:
+  - include: handlers/main.yml
+
+  roles:
+    - base
+    - certs
+    - config

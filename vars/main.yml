@@ -1,0 +1,12 @@
+# Server config
+taskd_fqdn: task.smirnov.work
+
+# cert config
+taskd_organization: SmirnovLabs
+taskd_locality: Bay Area
+taskd_state: CA
+taskd_country: US
+
+# client config
+taskd_org: SmirnovLabs
+taskd_client: Ivan Smirnov

@@ -1,19 +1,24 @@
 ---
-- hosts: all
-  gather_facts: no
-  vars:
-    taskd_org: SmirnovLabs
-    taskd_client: Test User3
+- hosts: server
+  gather_facts: yes
   vars_files:
     - 'defaults/main.yml'
+    - 'vars/main.yml'
 
   handlers:
-  - name: restart taskd
-    service:
-      name: taskd
-      state: restarted
-    ignore_errors: yes
+  - include: handlers/main.yml
 
   roles:
     - add-user
+
+- hosts: clients
+  gather_facts: yes
+  vars_files:
+    - 'defaults/main.yml'
+    - 'vars/main.yml'
+
+  handlers:
+  - include: handlers/main.yml
+
+  roles:
     - deploy-user

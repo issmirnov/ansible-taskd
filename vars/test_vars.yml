@@ -1,0 +1,12 @@
+# Server config
+taskd_fqdn: taskd
+
+# cert config
+taskd_organization: TestOrg
+taskd_locality: Locality
+taskd_state: CA
+taskd_country: US
+
+# client config
+taskd_org: TestOrg
+taskd_client: Test User0

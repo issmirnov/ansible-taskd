@@ -1,20 +1,2 @@
----
-- hosts: all
-  gather_facts: yes
-  vars:
-    taskd_organization: SmirnovLabs
-    taskd_fqdn: task.smirnov.work
-  vars_files:
-    - 'defaults/main.yml'
-
-  handlers:
-  - name: restart taskd
-    service:
-      name: taskd
-      state: restarted
-    ignore_errors: yes
-
-  roles:
-    - base
-    - certs
-    - config
+- include: configure_server.yml
+- include: add_user.yml

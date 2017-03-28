@@ -1,0 +1,5 @@
+# Major hacks to pull vars from server into here, since we have a separate play.
+# Deprecated?
+server_hostname: "{{ hostvars[play_hosts[0]].groups.server[0] }}"
+taskd_user_key: "{{ hostvars[server_hostname].taskd_user_key }}"
+taskd_client_cert_name: "{{ hostvars[server_hostname].taskd_client_cert_name }}"

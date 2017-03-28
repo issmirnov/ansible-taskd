@@ -2,50 +2,47 @@
 
 Forked from: https://github.com/oleg-fiksel/ansible-taskd
 
-This playbook's aim is to deploy and base configure a taskd server.
-Currently it's working only with Ubuntu Server 16.04 (LTS).
+This playbook will configure a [taskd server](https://taskwarrior.org/docs/taskserver/configure.html), and can add users as well. Tested on Ubuntu 16.04 as server, Ubuntu 16.04 + Mac OSX as the clients.
 
-This playbook doesn't handle the task (client) installation. Refer to http://taskwarrior.org/download/#setup for help.
-
-**NOTE: THIS IS WIP, DO NOT USE YET.**
 
 ## Usage
 
-### Install and configure taskd
-
-Adjust variables, if needed, in `defaults/main.yml`
+1. Create your hosts file
 
 ```
-ansible-playbook -i taskd-server.domain, main.yml
+[server]
+task.yourserver.com
+
+[clients]
+laptop ansible_connection=local
+desktop ansible_user=dev
+
 ```
 
-### Add user (client)
+2. Set up your variables in `vars/main.yml`
+3. Run the playbook: `ansible-playbook main.yml`
 
-```
-ansible-playbook -i taskd-server.domain, add_user.yml -e 'taskd_org=Public taskd_client=testuser'
-```
-
-This will generate the certificates and download them into the fetch/ directory. Note - the auth file is not yet downloaded, WIP.
+If at a later time you would like to just add a user, you can run: `ansible-playbook add_user.yml`. The server playbook is idempotent though, so you don't risk anything by running it more than once.
 
 
-## TODO
+## Explanation
 
-- Install task client properly
-  - package module
-  - deploy auth file into ~/.task
-- check config template, see if it matches prod.
-- check config, see if it matches my smirnovlabs.
+The add_user role will download the `auth` file, as well as the CA and client certs and sync them to all defined clients. The sample `taskrc` is very minimal, and contains to opinions on task config. It is meant to be used with a [modular config](https://github.com/issmirnov/dotfiles/blob/master/taskwarrior/taskrc). In order to avoid data loss, this playbook will not overwrite existing files.
 
 
 ## Notes
 
-- If you change cert vars, you will have to redo certificates and re-add users. Sorry, this is the way PKI works.
+- If you change certificate variables, you will have to redo certificates and re-add users. Sorry, this is the way PKI works.
+- If you already have a task server and are switching, run `task sync init` after running the playbook, then a `task sync`. This should clear up any issues such as `500 Client sync key not found.` or `No common ancestor`
 
 ## Testing
 
-- `vagrant up`
-- `vagrant destroy`
+We use vagrant to test. The test.yml file uses vars from `vars/test_vars.yml`.  
+
+- `vagrant up` - will create a new box
+- `vagrant destroy` - will reset the box
 
 # Links
 
-* [http://taskwarrior.org/](Taskwarrior)
+- [http://taskwarrior.org/](Taskwarrior)
+- [Ansible on Vagrant](https://www.vagrantup.com/docs/provisioning/ansible.html)

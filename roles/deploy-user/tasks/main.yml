@@ -1,19 +1,16 @@
-# - name: create template
-#   local_action: template src=auth dest=fetch/auth
+---
+- name: install the latest version of task
+  package:
+    name: task
+    state: latest
 
-- name: fetch tinc hosts file after key creation
-  fetch: >
-    src={{taskd_certs_path}}/{{ item }}
-    dest=fetch/{{ item }}
-    flat=yes
-  with_items:
-    - ca.cert.pem
-    - "{{taskd_client_cert_name}}.cert.pem"
-    - "{{taskd_client_cert_name}}.key.pem"
-
-- name: sync the fetched tinc hosts files on each host
+- name: sync the fetched task configs on each host
   synchronize: >
     src=fetch/
     dest=~/.task/
 
-# TODO install taskd on clients. can fork on os, use package module for task.
+- name: Write ~/.taskrc
+  template:
+    src: taskrc
+    dest: ~/.taskrc
+    force: no

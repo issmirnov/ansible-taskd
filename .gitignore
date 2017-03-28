@@ -5,9 +5,11 @@
 # ansible
 *.retry
 
+
 # vagrant
 .vagrant
 *console.log
 
-# Client specific data 
+# Client specific data
 fetch/
+hosts

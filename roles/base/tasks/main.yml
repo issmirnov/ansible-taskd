@@ -19,6 +19,16 @@
     name: "{{taskd_user}}"
     group: "{{taskd_group}}"
     home: "{{taskd_home}}"
+    createhome: no
+    shell: /usr/sbin/nologin
+
+- name: create taskd home dir
+  file:
+    path: "{{ taskd_home }}"
+    owner: "{{ taskd_user }}"
+    group: "{{ taskd_group }}"
+    state: directory
+  become: true
 
 - name: create dirs
   file:
@@ -27,8 +37,8 @@
     owner: "{{taskd_user}}"
     group: "{{taskd_group}}"
   with_items:
-      - "{{taskd_data_path}}"
-      - "{{taskd_source_dir}}"
+      - "{{ taskd_data_path }}"
+      - "{{ taskd_source_dir }}"
   become: true
   become_user: "{{taskd_user}}"
 

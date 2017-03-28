@@ -1,0 +1,3 @@
+# Modular Task Warrior Config
+data.location=~/.task
+include ~/.task/auth

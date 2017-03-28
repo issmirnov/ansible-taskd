@@ -13,6 +13,6 @@ taskd_fqdn: "{{ ansible_hostname }}"
 taskd_repo_url: 'https://git.tasktools.org/scm/tm/taskd.git'
 taskd_expiration_days: 365
 taskd_organization:
-taskd_locality: Bay Area
-taskd_state: CA
-taskd_country: US
+taskd_locality:
+taskd_state:
+taskd_country:

@@ -1,6 +1,10 @@
+# Taskd configuration
+#
+# See http://taskwarrior.org/docs/taskserver/configure.html
+# or man taskdrc
 confirmation=1
 extensions={{taskd_install_dir}}/libexec/taskd
-ip.log=on
+ip.log=off
 log={{taskd_data_path}}/taskd.log
 pid.file={{taskd_data_path}}/taskd.pid
 queue.size=10
@@ -8,9 +12,7 @@ request.limit=1048576
 root={{taskd_data_path}}
 server={{taskd_fqdn}}:53589
 trust=strict
-verbose=1
-#debug.tls=200
-#debug.tls=2
+verbose=0
 
 client.cert={{taskd_certs_path}}/client.cert.pem
 client.key={{taskd_certs_path}}/client.key.pem

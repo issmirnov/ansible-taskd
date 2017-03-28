@@ -10,7 +10,7 @@ Type=simple
 User={{taskd_user}}
 Group={{taskd_group}}
 WorkingDirectory={{taskd_data_path}}
-InaccessibleDirectories=/root /boot /opt /mnt /media
+InaccessibleDirectories=/root /boot /mnt /media
 ReadOnlyDirectories=/etc /usr
 
 [Install]

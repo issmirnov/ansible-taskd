@@ -1,0 +1,15 @@
+- name: create local fetch dir
+  local_action: file path=fetch state=directory
+
+- name: create auth config
+  local_action: template src=auth dest=fetch/auth
+
+- name: fetch user cert files
+  fetch: >
+    src={{taskd_certs_path}}/{{ item }}
+    dest=fetch/{{ item }}
+    flat=yes
+  with_items:
+    - ca.cert.pem
+    - "{{taskd_client_cert_name}}.cert.pem"
+    - "{{taskd_client_cert_name}}.key.pem"
