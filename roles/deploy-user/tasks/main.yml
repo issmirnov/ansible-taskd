@@ -1,9 +1,27 @@
 ---
+- name: load encrypted sudo passwords, if needed
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.vault.yml"
+    - "{{ ansible_os_family }}.vault.yml"
+  when: ansible_user_gid != 0
+  no_log: yes
+  
 - name: install the latest version of task
-  package:
+  become: yes
+  apt:
     name: task
     state: latest
+    update_cache: yes
+  when: ansible_os_family == "Debian"
 
+- name: install the latest version of task
+  homebrew:
+    name: task
+    state: latest
+    update_homebrew: yes
+  when: ansible_os_family == "Darwin"  
+  
 - name: sync the fetched task configs on each host
   synchronize: >
     src=fetch/
@@ -14,3 +32,24 @@
     src: taskrc
     dest: ~/.taskrc
     force: no
+
+# for some reason remote command modules would fail. Setting path explicitly
+- name: set path to task executable
+  set_fact:
+    task_binary: "{% if ansible_system == 'Linux'%}/usr/bin/task{% elif ansible_system == 'Darwin'%}/usr/local/bin/task{% endif %}"
+    
+- name: try a task sync
+  command: "{{ task_binary }} sync"
+  register: task_sync
+  ignore_errors: yes
+  failed_when: false
+  no_log: yes
+
+# - debug:
+#     var: task_sync.stderr
+#     var: task_sync
+
+- name: run task sync init
+  shell: "yes | {{ task_binary }} sync init"
+  no_log: yes
+  when: "task_sync.stderr != None and 'Sync successful' not in task_sync.stderr"

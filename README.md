@@ -20,7 +20,8 @@ desktop ansible_user=dev
 ```
 
 2. Set up your variables in `vars/main.yml`
-3. Run the playbook: `ansible-playbook main.yml`
+3. Set your sudo password with `ansible-vault edit vars/Debian.vault.yml` and `ansible-vault edit vars/Darwin.vault.yml`
+4. Run the playbook: `ansible-playbook main.yml`
 
 If at a later time you would like to just add a user, you can run: `ansible-playbook add_user.yml`. The server playbook is idempotent though, so you don't risk anything by running it more than once.
 

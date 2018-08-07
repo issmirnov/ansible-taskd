@@ -21,7 +21,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     taskd.vm.provision "ansible", run: "always" do |ansible|
       ansible.playbook = "vagrant.yml"
-      ansible.sudo = true
+      ansible.become = true
+      ansible.compatibility_mode = "2.0"
+      #ansible.verbose = "vv"
     end
   end
 

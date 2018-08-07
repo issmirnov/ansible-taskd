@@ -1,6 +1,6 @@
 ---
 taskd_version: 1.2.0
-taskd_git_tag: "s{{taskd_version}}"
+taskd_git_tag: "{{taskd_version}}"
 taskd_user: taskd
 taskd_group: taskd
 taskd_home: /opt/taskd
@@ -10,7 +10,8 @@ taskd_symlink_dir: "{{taskd_home}}/active"
 taskd_data_path: "{{taskd_home}}/data"
 taskd_certs_path: "{{taskd_data_path}}/certs"
 taskd_fqdn: "{{ ansible_hostname }}"
-taskd_repo_url: 'https://git.tasktools.org/scm/tm/taskd.git'
+taskd_port: "53589"
+taskd_repo_url: 'https://github.com/GothenburgBitFactory/taskserver.git'
 taskd_expiration_days: 365
 taskd_organization:
 taskd_locality:

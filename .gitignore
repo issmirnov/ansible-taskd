@@ -13,3 +13,6 @@
 # Client specific data
 fetch/
 hosts
+
+# vim
+.swp*

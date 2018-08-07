@@ -6,6 +6,7 @@ taskd_organization: SmirnovLabs
 taskd_locality: Bay Area
 taskd_state: CA
 taskd_country: US
+taskd_expiration_days: 3650
 
 # client config
 taskd_org: SmirnovLabs

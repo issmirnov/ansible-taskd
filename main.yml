@@ -1,2 +1,2 @@
-- include: configure_server.yml
-- include: add_user.yml
+- import_playbook: configure_server.yml
+- import_playbook: add_user.yml

@@ -1,0 +1,19 @@
+---
+- name: Check if UFW installed
+  shell: dpkg-query -s ufw | grep Status
+  register: ufw_dkpg
+  changed_when: false
+  tags: ufw
+
+- name: check if UFW service enabled or running
+  command: systemctl is-active --quiet service  ufw
+  changed_when: false
+  register: ufw_systemctl
+  tags: ufw
+
+- name: punch hole in ufw if needed
+  ufw: rule=allow port={{ taskd_port }} proto=tcp
+  become: yes
+  when: "'install ok installed' in ufw_dkpg.stdout and ufw_systemctl.rc == 0" 
+  tags: ufw
+

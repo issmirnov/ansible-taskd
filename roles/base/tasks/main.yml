@@ -54,6 +54,7 @@
   shell: "cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX:PATH={{taskd_install_dir}} ."
   args:
     chdir: "{{taskd_source_dir}}"
+    creates: "{{taskd_source_dir}}/Makefile"  
   become: true
   become_user: "{{taskd_user}}"
 
@@ -86,9 +87,12 @@
   template:
     src: taskd.service
     dest: /etc/systemd/system/taskd.service
+  register: taskd_systemd_creation
 
 - name: reload systemd
-  shell: systemctl daemon-reload
+  systemd:
+    daemon_reload: yes
+  when: taskd_systemd_creation.changed
 
 - name: enable taskd systemd service
   service:
@@ -96,3 +100,5 @@
     enabled: yes
   notify:
   - restart taskd
+
+- include_tasks: ufw_check.yml
